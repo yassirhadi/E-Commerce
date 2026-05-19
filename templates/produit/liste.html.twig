@@ -1,0 +1,79 @@
+{% extends 'base/modele.html.twig' %}
+
+{% block titre %}Produits {{ categorie.name }} - Ma Boutique{% endblock %}
+
+{% block contenu %}
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_accueil') }}" class="text-decoration-none">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_categorie_parcourir') }}" class="text-decoration-none">Catégories</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ categorie.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Jumbotron -->
+    <div class="p-5 mb-4 bg-{{ categorie.badgeColor }} bg-gradient text-white rounded-3">
+        <div class="container-fluid py-3">
+            <h1 class="display-4 fw-bold">{{ categorie.name }}</h1>
+            <p class="col-md-8 fs-5">{{ categorie.description }}</p>
+            <span class="badge bg-light text-dark fs-6">{{ categorie.products|length }} Produits disponibles</span>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3>Parcourir {{ categorie.name }}</h3>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-secondary active">Grille</button>
+                    <button type="button" class="btn btn-outline-secondary">Liste</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for produit in produits %}
+        <div class="col">
+            <div class="card h-100">
+                <img src="{{ asset('medias/produits/' ~ (produit.image ?: 'default.png')) }}"
+                     class="card-img-top"
+                     alt="{{ produit.name }}"
+                     style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-{{ categorie.badgeColor }} mb-2">{{ categorie.name }}</span>
+                    <h5 class="card-title">{{ produit.name }}</h5>
+                    <p class="card-text fw-bold text-success">{{ produit.price|number_format(2, ',', ' ') }} €</p>
+                    <a href="{{ path('app_produit_details', {'id': produit.id}) }}"
+                       class="btn btn-outline-{{ categorie.badgeColor }}">
+                        Voir les détails
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Aucun produit trouvé dans cette catégorie.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Pagination des produits" class="mt-5">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Précédent</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Suivant</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% endblock %}

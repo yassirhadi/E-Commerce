@@ -1,6 +1,7 @@
 parameters:
     locale: 'fr'
 
+
 services:
     # defaults applies to all services unless explicitly overridden
     _defaults:
@@ -30,3 +31,23 @@ services:
         arguments:
             $productRepository: '@App\Service\ProductRepositoryInterface'
         tags: ['form.type']
+
+    # ⬇⬇⬇ CORRECTION ICI : Cette ligne doit être DANS la section services
+    App\Controller\CourseController:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
+
+
+     # Liaison de l'interface CartInterface à l'implémentation SessionCart
+    # Pour utiliser ApiCart à la place, changez uniquement cette ligne
+    App\Cart\CartInterface:
+        class: App\Cart\SessionCart
+
+    # CartHandler reçoit SessionCart via CartInterface (DIP respecté)
+    App\Cart\CartHandler:
+        arguments:
+            $strategie: '@App\Cart\CartInterface'
+
+    # Pour tester avec ApiCart, utilisez l'attribut #[Autowire] dans le contrôleur
+    # ou changez App\Cart\CartInterface: class: App\Cart\ApiCart

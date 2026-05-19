@@ -1,0 +1,72 @@
+{# templates/auth/inscription.html.twig #}
+{% extends 'base/modele.html.twig' %}
+
+{% block titre %}Inscription - Ma Boutique{% endblock %}
+
+{% block contenu %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="card-title mb-4">Créer un compte</h2>
+
+                    {{ form_start(formulaire, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                        <div class="mb-3">
+                            {{ form_label(formulaire.nomComplet) }}
+                            {{ form_widget(formulaire.nomComplet) }}
+                            {{ form_errors(formulaire.nomComplet) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(formulaire.email) }}
+                            {{ form_widget(formulaire.email) }}
+                            {{ form_errors(formulaire.email) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(formulaire.telephone) }}
+                            {{ form_widget(formulaire.telephone) }}
+                            {{ form_errors(formulaire.telephone) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(formulaire.adresse) }}
+                            {{ form_widget(formulaire.adresse) }}
+                            {{ form_errors(formulaire.adresse) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(formulaire.plainPassword.first) }}
+                            {{ form_widget(formulaire.plainPassword.first) }}
+                            {{ form_errors(formulaire.plainPassword.first) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(formulaire.plainPassword.second) }}
+                            {{ form_widget(formulaire.plainPassword.second) }}
+                            {{ form_errors(formulaire.plainPassword.second) }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                S'inscrire
+                            </button>
+                        </div>
+
+                    {{ form_end(formulaire) }}
+
+                    <hr class="my-4">
+                    <p class="text-center text-muted">
+                        Déjà un compte ?
+                        <a href="{{ path('app_connexion') }}" class="text-decoration-none">
+                            Se connecter
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

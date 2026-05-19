@@ -1,9 +1,8 @@
-# Ce fichier peut être vide, les routes sont définies via les attributs
-# Si vous avez un fichier routes/annotations.yaml, assurez-vous qu'il contient:
-
 controllers:
-     resource: ../src/Controller/
-     type: attribute
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
 
 
 #app_home:
@@ -17,3 +16,54 @@ app_catalog:
 app_payment:
     path: /payment
     controller: App\Controller\PaymentController::index
+
+app_accueil:
+    path: /accueil
+    controller: App\Controller\AccueilController::index
+
+app_produit_details:
+    path: /produit/{id}
+    controller: App\Controller\ProduitController::details
+
+app_produit_liste:
+    path: /categorie/{slug}
+    controller: App\Controller\ProduitController::liste
+
+app_categorie_parcourir:
+    path: /categories
+    controller: App\Controller\CategorieController::parcourir
+
+app_panier_recapitulatif:
+    path: /panier
+    controller: App\Controller\PanierController::recapitulatif
+
+app_panier_ajouter:
+    path: /panier/ajouter/{id}
+    controller: App\Controller\PanierController::ajouter
+    methods: [POST]
+
+app_panier_supprimer:
+    path: /panier/supprimer/{produitId}
+    controller: App\Controller\PanierController::supprimer
+    methods: [POST]
+
+app_panier_vider:
+    path: /panier/vider
+    controller: App\Controller\PanierController::vider
+    methods: [POST]
+
+app_connexion:
+    path: /connexion
+    controller: App\Controller\AuthentificationController::connexion
+
+app_profil:
+    path: /profil
+    controller: App\Controller\AuthentificationController::profil
+
+app_inscription:
+    path: /inscription
+    controller: App\Controller\AuthentificationController::inscription
+
+app_deconnexion:
+    path: /deconnexion
+    controller: App\Controller\AuthentificationController::deconnexion

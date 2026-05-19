@@ -1,0 +1,46 @@
+{% extends 'base/modele.html.twig' %}
+
+{% block titre %}Accueil - Ma Boutique{% endblock %}
+
+{% block contenu %}
+<!-- Hero Section -->
+<div class="bg-primary bg-gradient text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold mb-4">Bienvenue sur Ma Boutique</h1>
+                <p class="lead mb-4">Découvrez des produits exceptionnels dans toutes les catégories. Des articles de qualité à des prix imbattables.</p>
+                <a href="{{ path('app_produit_liste', {'slug': 'electronique'}) }}" class="btn btn-light btn-lg me-2">Acheter maintenant</a>
+                <a href="{{ path('app_categorie_parcourir') }}" class="btn btn-outline-light btn-lg">Parcourir les catégories</a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="https://via.placeholder.com/500x400" class="img-fluid rounded" alt="Shopping">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 class="mb-4">Nos produits</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for produit in produits %}
+        <div class="col">
+            <div class="card h-100">
+                <img src="{{ asset('medias/produits/' ~ (produit.image ?: 'default.png')) }}"
+                     class="card-img-top"
+                     alt="{{ produit.name }}"
+                     style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-{{ produit.category.badgeColor }} mb-2">{{ produit.category.name }}</span>
+                    <h5 class="card-title">{{ produit.name }}</h5>
+                    <p class="card-text fw-bold text-success">{{ produit.price|number_format(2, ',', ' ') }} €</p>
+                    <a href="{{ path('app_produit_details', {'id': produit.id}) }}"
+                       class="btn btn-outline-primary">Voir les détails</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,159 @@
+{# templates/panier/recapitulatif.html.twig #}
+{% extends 'base/modele.html.twig' %}
+
+{% block titre %}Mon Panier - Ma Boutique{% endblock %}
+
+{% block contenu %}
+<div class="container my-5">
+    <h1 class="mb-4">Mon Panier</h1>
+
+    {# Messages flash #}
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type == 'success' ? 'success' : 'info' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% if panier.articles is empty %}
+        <div class="alert alert-info">
+            <strong>Votre panier est vide.</strong>
+            <a href="{{ path('app_accueil') }}" class="alert-link ms-2">Continuer vos achats</a>
+        </div>
+    {% else %}
+    <div class="row">
+        {# Liste des articles #}
+        <div class="col-lg-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Articles ({{ panier.nombreArticles }})</h5>
+                    <form action="{{ path('app_panier_vider') }}" method="POST">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Vider le panier ?')">
+                            Vider le panier
+                        </button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Quantité</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for article in panier.articles %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if article.image %}
+                                                <img src="{{ asset('medias/produits/' ~ article.image) }}"
+                                                     class="img-thumbnail me-3"
+                                                     alt="{{ article.nom }}"
+                                                     style="width: 80px; height: 80px; object-fit: cover;">
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-0">{{ article.nom }}</h6>
+                                                <small class="text-muted">Réf. #{{ article.produitId }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ article.prix|number_format(2, ',', ' ') }} €</td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ article.quantite }}</span>
+                                    </td>
+                                    <td class="fw-bold text-success">
+                                        {{ article.prixTotal|number_format(2, ',', ' ') }} €
+                                    </td>
+                                    <td>
+                                        <form action="{{ path('app_panier_supprimer', {'produitId': article.produitId}) }}"
+                                              method="POST">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                Retirer
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ path('app_accueil') }}" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5
+                          0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                </svg>
+                Continuer vos achats
+            </a>
+        </div>
+
+        {# Résumé commande #}
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Résumé de la commande</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Sous-total :</span>
+                        <span>{{ sous_total|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Expédition :</span>
+                        <span>
+                            {% if frais_port == 0 %}
+                                <span class="text-success">Gratuit</span>
+                            {% else %}
+                                {{ frais_port|number_format(2, ',', ' ') }} €
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Taxes :</span>
+                        <span>{{ taxes|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total :</strong>
+                        <strong class="text-success">{{ total|number_format(2, ',', ' ') }} €</strong>
+                    </div>
+                    {% if sous_total < 50 %}
+                        <div class="alert alert-warning py-2 small">
+                            Ajoutez {{ (50 - sous_total)|number_format(2, ',', ' ') }} € pour la livraison gratuite !
+                        </div>
+                    {% endif %}
+                    <div class="d-grid">
+                        <button class="btn btn-success btn-lg">Passer à la caisse</button>
+                    </div>
+                </div>
+            </div>
+
+            {# Code promo #}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6 class="card-title">Vous avez un code promo ?</h6>
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Saisissez le code">
+                            <button class="btn btn-outline-secondary" type="submit">Appliquer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliothèque de cours{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Bibliothèque de cours</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="get" class="d-flex">
+                <input type="text" name="search" class="form-control me-2"
+                       placeholder="Rechercher un cours..." value="{{ search }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Rechercher
+                </button>
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{{ path('course_new') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Ajouter un cours
+            </a>
+        </div>
+    </div>
+
+    {% if courses|length > 0 %}
+        <div class="row">
+            {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.title }}</h5>
+
+                            {% if course.summary %}
+                                <p class="card-text">{{ course.summary|slice(0, 100) }}{% if course.summary|length > 100 %}...{% endif %}</p>
+                            {% endif %}
+
+                            <div class="mt-3">
+                                {% if course.filePath %}
+                                    <p class="mb-2">
+                                        <i class="fa {{ course.fileIcon }}"></i>
+                                        <small class="text-muted">
+                                            {{ course.originalFilename ?: 'Fichier' }}
+                                            ({{ course.formattedFileSize }})
+                                        </small>
+                                    </p>
+                                {% endif %}
+
+                                <small class="text-muted d-block mb-2">
+                                    <i class="fas fa-calendar"></i>
+                                    Ajouté le {{ course.createdAt|date('d/m/Y') }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{{ path('course_show', {'id': course.id}) }}"
+                               class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i> Voir détails
+                            </a>
+
+                            {% if course.filePath %}
+                                <a href="{{ path('course_download', {'id': course.id}) }}"
+                                   class="btn btn-sm btn-success">
+                                    <i class="fas fa-download"></i> Télécharger
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            {% if search %}
+                Aucun cours trouvé pour "{{ search }}"
+            {% else %}
+                Aucun cours disponible. <a href="{{ path('course_new') }}">Ajoutez le premier cours !</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

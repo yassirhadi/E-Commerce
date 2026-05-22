@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un cours{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Ajouter un nouveau cours</h1>
+
+    {{ form_start(form) }}
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.summary) }}
+                {{ form_widget(form.summary) }}
+                {{ form_errors(form.summary) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.file) }}
+                {{ form_widget(form.file) }}
+                <small class="form-text text-muted">
+                    Formats acceptés: PDF, Word (.doc, .docx), PowerPoint (.ppt, .pptx), Images (.jpg, .png, .gif)<br>
+                    Taille maximum: 10 Mo
+                </small>
+                {{ form_errors(form.file) }}
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Enregistrer le cours
+                </button>
+                <a href="{{ path('course_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
